@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSD Time Machine</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1 class="title">PSD Time Machine</h1>
+            <div id="documentName" class="document-name">No document open</div>
+        </header>
+
+        <!-- Create Snapshot Section -->
+        <section class="create-section">
+            <sp-button id="createSnapshotBtn" class="create-btn" variant="cta">
+                Create Snapshot
+            </sp-button>
+        </section>
+
+        <!-- Snapshots List Section -->
+        <section class="snapshots-section">
+            <div class="section-header">
+                <h2 class="section-title">Snapshots</h2>
+                <sp-button id="refreshBtn" class="refresh-btn" variant="secondary" quiet>
+                    Refresh
+                </sp-button>
+            </div>
+
+            <div id="snapshotsList" class="snapshots-list">
+                <!-- Snapshots will be dynamically inserted here -->
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <p>No snapshots yet</p>
+                <p class="empty-state-hint">Create your first snapshot to get started</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal for Creating Snapshot -->
+    <dialog id="createSnapshotModal" class="modal">
+        <form method="dialog" class="modal-form">
+            <h3 class="modal-title">Create New Snapshot</h3>
+
+            <div class="form-group">
+                <label for="snapshotLabel">Label *</label>
+                <sp-textfield id="snapshotLabel" placeholder="e.g., After client feedback" required></sp-textfield>
+            </div>
+
+            <div class="form-group">
+                <label for="snapshotNote">Note</label>
+                <sp-textarea id="snapshotNote" placeholder="Add any additional notes or comments..."></sp-textarea>
+            </div>
+
+            <div class="modal-actions">
+                <sp-button id="cancelSnapshotBtn" variant="secondary">Cancel</sp-button>
+                <sp-button id="confirmSnapshotBtn" variant="cta">Create</sp-button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Modal for Diff View -->
+    <dialog id="diffModal" class="modal diff-modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Snapshot Diff</h3>
+            <sp-button id="closeDiffBtn" class="close-btn" variant="secondary" quiet>✕</sp-button>
+        </div>
+
+        <div id="diffContent" class="diff-content">
+            <!-- Diff results will be dynamically inserted here -->
+        </div>
+
+        <div class="modal-actions">
+            <sp-button id="closeDiffBottomBtn" variant="primary">Close</sp-button>
+        </div>
+    </dialog>
+
+    <!-- Modal for Confirmation -->
+    <dialog id="confirmModal" class="modal">
+        <div class="modal-form">
+            <h3 class="modal-title" id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage" class="confirm-message"></p>
+
+            <div class="modal-actions">
+                <sp-button id="cancelConfirmBtn" variant="secondary">Cancel</sp-button>
+                <sp-button id="confirmActionBtn" variant="cta">Confirm</sp-button>
+            </div>
+        </div>
+    </dialog>
+</body>
+</html>

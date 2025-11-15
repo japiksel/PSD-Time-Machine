@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing files
+*.psd
+*.psdtime.json
+
+# Node modules (if any dependencies are added later)
+node_modules/
+
+# Build artifacts
+dist/
+build/
