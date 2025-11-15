@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Feature - Mockup</title>
+    <style>
+        /* Timeline Feature Mockup Styles */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Adobe Clean", -apple-system, sans-serif;
+            background: #2d2d2d;
+            color: #e8e8e8;
+            padding: 20px;
+        }
+
+        .timeline-container {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timeline-btn {
+            padding: 6px 12px;
+            background: #4a4a4a;
+            border: none;
+            border-radius: 4px;
+            color: #e8e8e8;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .timeline-btn:hover {
+            background: #5a5a5a;
+        }
+
+        /* Timeline Track */
+        .timeline-track-wrapper {
+            position: relative;
+            padding: 40px 20px;
+            margin: 20px 0;
+        }
+
+        .timeline-track {
+            position: relative;
+            height: 4px;
+            background: #4a4a4a;
+            border-radius: 2px;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #4A90E2, #7B68EE);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Snapshot Markers */
+        .snapshot-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .marker-dot {
+            width: 16px;
+            height: 16px;
+            background: #4A90E2;
+            border: 3px solid #1e1e1e;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4);
+        }
+
+        .snapshot-marker:hover .marker-dot {
+            width: 20px;
+            height: 20px;
+            box-shadow: 0 4px 16px rgba(74, 144, 226, 0.6);
+        }
+
+        .snapshot-marker.current .marker-dot {
+            background: #50E3C2;
+            width: 20px;
+            height: 20px;
+            box-shadow: 0 4px 16px rgba(80, 227, 194, 0.6);
+        }
+
+        .snapshot-marker.milestone .marker-dot {
+            background: #F5A623;
+            box-shadow: 0 2px 8px rgba(245, 166, 35, 0.4);
+        }
+
+        .marker-label {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 11px;
+            color: #b8b8b8;
+            background: #2d2d2d;
+            padding: 4px 8px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .snapshot-marker:hover .marker-label,
+        .snapshot-marker.current .marker-label {
+            opacity: 1;
+        }
+
+        .marker-time {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #6a6a6a;
+            white-space: nowrap;
+        }
+
+        /* Timeline Info Panel */
+        .timeline-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .info-card {
+            background: #2d2d2d;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #8a8a8a;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4A90E2;
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .preview-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .preview-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .layer-preview {
+            background: #2d2d2d;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .layer-thumbnail {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .layer-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .layer-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: #e8e8e8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .layer-details {
+            font-size: 10px;
+            color: #8a8a8a;
+            margin-top: 4px;
+        }
+
+        .change-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            background: rgba(80, 227, 194, 0.2);
+            color: #50E3C2;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-left: 6px;
+        }
+
+        .change-badge.removed {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6464;
+        }
+
+        /* Branching Visualization */
+        .branch-line {
+            position: absolute;
+            top: 50%;
+            height: 2px;
+            background: #7B68EE;
+            transform: translateY(-50%);
+        }
+
+        .branch-point {
+            position: absolute;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background: #7B68EE;
+            border: 2px solid #1e1e1e;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="timeline-container">
+        <div class="timeline-header">
+            <div class="timeline-title">Timeline View</div>
+            <div class="timeline-controls">
+                <button class="timeline-btn">← Zoom Out</button>
+                <button class="timeline-btn">Zoom In →</button>
+                <button class="timeline-btn">◉ Quick Snapshot</button>
+            </div>
+        </div>
+
+        <div class="timeline-track-wrapper">
+            <div class="timeline-track">
+                <div class="timeline-progress" style="width: 75%;"></div>
+
+                <!-- Snapshot Markers -->
+                <div class="snapshot-marker" style="left: 0%;">
+                    <div class="marker-dot"></div>
+                    <div class="marker-label">Initial Design</div>
+                    <div class="marker-time">10:23 AM</div>
+                </div>
+
+                <div class="snapshot-marker milestone" style="left: 25%;">
+                    <div class="marker-dot"></div>
+                    <div class="marker-label">Client Review v1</div>
+                    <div class="marker-time">11:45 AM</div>
+                </div>
+
+                <div class="snapshot-marker" style="left: 50%;">
+                    <div class="marker-dot"></div>
+                    <div class="marker-label">After Feedback</div>
+                    <div class="marker-time">2:15 PM</div>
+                </div>
+
+                <div class="snapshot-marker current" style="left: 75%;">
+                    <div class="marker-dot"></div>
+                    <div class="marker-label">Current State</div>
+                    <div class="marker-time">4:30 PM</div>
+                </div>
+
+                <div class="snapshot-marker" style="left: 100%; opacity: 0.3;">
+                    <div class="marker-dot"></div>
+                    <div class="marker-label">Future</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-info">
+            <div class="info-card">
+                <div class="info-label">Total Snapshots</div>
+                <div class="info-value">12</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Time Span</div>
+                <div class="info-value">6h 7m</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Changes</div>
+                <div class="info-value">47</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="preview-panel">
+        <div class="preview-header">
+            <div class="preview-title">Snapshot Preview: "After Feedback"</div>
+            <div class="timeline-controls">
+                <button class="timeline-btn">Restore</button>
+                <button class="timeline-btn">Diff</button>
+            </div>
+        </div>
+
+        <div class="preview-content">
+            <div class="layer-preview">
+                <div class="layer-thumbnail"></div>
+                <div class="layer-info">
+                    <div class="layer-name">Hero/Title/Main Text</div>
+                    <div class="layer-details">
+                        Text Layer • Opacity: 100%
+                        <span class="change-badge">Modified</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layer-preview">
+                <div class="layer-thumbnail" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <div class="layer-info">
+                    <div class="layer-name">Hero/Background/Gradient</div>
+                    <div class="layer-details">
+                        Pixel Layer • Opacity: 85%
+                    </div>
+                </div>
+            </div>
+
+            <div class="layer-preview">
+                <div class="layer-thumbnail" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <div class="layer-info">
+                    <div class="layer-name">Characters/Dragon</div>
+                    <div class="layer-details">
+                        Smart Object • Opacity: 100%
+                        <span class="change-badge">Modified</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layer-preview">
+                <div class="layer-thumbnail" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                <div class="layer-info">
+                    <div class="layer-name">UI/CTA Button</div>
+                    <div class="layer-details">
+                        Group • 3 layers
+                        <span class="change-badge removed">Deleted</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="color: #8a8a8a; font-size: 12px; text-align: center; margin-top: 40px;">
+        <p><strong>Timeline Feature Mockup</strong></p>
+        <p>Visual representation of the improved timeline interface with:</p>
+        <p>• Interactive markers • Hover previews • Quick actions • Change indicators</p>
+    </div>
+</body>
+</html>
